@@ -4077,7 +4077,7 @@ Provide a professional answer.
 Mention limitations if relevant.
 """
 
-                        response = get_ollama_response(
+                        response = get_ai_response(
                             prompt
                         )
 
