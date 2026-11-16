@@ -795,48 +795,83 @@ def get_categorical_columns(df):
 
 
 # ============================================================
-# OLLAMA AI ENGINE
+# AI ENGINE (GROQ CLOUD + LOCAL OLLAMA)
 # ============================================================
 
-def get_ollama_response(prompt):
+GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
+GROQ_MODEL = "openai/gpt-oss-120b"
+
+
+def get_groq_api_key():
+    """Read Groq key safely from Streamlit secrets or environment."""
+    try:
+        key = st.secrets.get("GROQ_API_KEY", "")
+        if key:
+            return str(key).strip()
+    except Exception:
+        pass
+    return os.getenv("GROQ_API_KEY", "").strip()
+
+
+def get_groq_response(prompt):
+    """Generate a response using Groq Cloud API."""
+    api_key = get_groq_api_key()
+    if not api_key:
+        return ("❌ GROQ_API_KEY missing. Streamlit Cloud → Settings → Secrets "
+                "mein GROQ_API_KEY set karein.")
 
     try:
+        response = requests.post(
+            GROQ_API_URL,
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            json={
+                "model": GROQ_MODEL,
+                "messages":[{"role":"user", "content": str(prompt)}],
+                "temperature": 0.2,
+            },
+            timeout=120,
+        )
+        response.raise_for_status()
+        data = response.json()
+        return data["choices"][0]["message"]["content"].strip()
+    except requests.exceptions.HTTPError as error:
+        try:
+            detail = response.json().get("error", {}).get("message", str(error))
+        except Exception:
+            detail = str(error)
+        return f"❌ Groq API error: {detail}"
+    except requests.exceptions.Timeout:
+        return "⏳ Groq response timeout. Please dobara try karein."
+    except requests.exceptions.RequestException as error:
+        return f"❌ Groq connection error: {error}"
+    except (KeyError, IndexError, TypeError, ValueError) as error:
+        return f"❌ Groq response parse error: {error}"
 
+
+def get_ollama_response(prompt):
+    """Local Ollama response. Kept available for local AI usage."""
+    try:
         response = requests.post(
             OLLAMA_URL,
-            json={
-                "model": OLLAMA_MODEL,
-                "prompt": prompt,
-                "stream": False
-            },
-            timeout=180
+            json={"model": OLLAMA_MODEL, "prompt": prompt, "stream": False},
+            timeout=180,
         )
-
         response.raise_for_status()
-
-        return response.json().get(
-            "response",
-            ""
-        )
-
+        return response.json().get("response", "")
     except requests.exceptions.ConnectionError:
-
-        return (
-            "❌ Ollama connection nahi ho raha.\n\n"
-            "Ollama install aur run karein.\n"
-            "Terminal mein `ollama serve` check karein."
-        )
-
+        return ("❌ Ollama connection nahi ho raha.\n\n"
+                "Ollama install aur run karein. Terminal mein `ollama serve` check karein.")
     except requests.exceptions.Timeout:
-
-        return (
-            "⏳ AI response timeout.\n"
-            "Please dobara try karein."
-        )
-
+        return "⏳ AI response timeout. Please dobara try karein."
     except Exception as error:
-
         return f"AI Error: {error}"
+
+
+def get_ai_response(prompt):
+    """Use Groq when a cloud key is configured; otherwise use local Ollama."""
+    if get_groq_api_key():
+        return get_groq_response(prompt)
+    return get_ollama_response(prompt)
 
 
 # ============================================================
@@ -1704,7 +1739,7 @@ def run_autonomous_analysis(df):
         "causes, or business context. Mention correlation is not causation.\\n\\n"
         + json.dumps(ai_payload, ensure_ascii=False, default=str)
     )
-    results["ai_summary"] = get_ollama_response(prompt)
+    results["ai_summary"] = get_ai_response(prompt)
     results["completed_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return results
 
@@ -2714,7 +2749,7 @@ Dataset:
 {context}
 """
 
-                    response = get_ollama_response(
+                    response = get_ai_response(
                         prompt
                     )
 
@@ -3485,7 +3520,7 @@ Do not invent numerical results.
 """
 
                                 explanation = (
-                                    get_ollama_response(
+                                    get_ai_response(
                                         prompt
                                     )
                                 )
@@ -3997,7 +4032,7 @@ Provide a useful analytical answer.
 Do not invent exact numbers.
 """
 
-                            response = get_ollama_response(
+                            response = get_ai_response(
                                 prompt
                             )
 
@@ -4025,7 +4060,7 @@ Do not invent exact numbers.
         ):
 
             st.caption(
-                "Powered by Ollama - Local AI"
+                "Cloud app: Groq AI • Local app: Ollama"
             )
 
             ai_question = st.text_area(
@@ -4045,7 +4080,7 @@ Do not invent exact numbers.
                 if ai_question:
 
                     with st.spinner(
-                        "Local AI is thinking..."
+                        "AI is thinking..."
                     ):
 
                         context = create_dataset_context(
