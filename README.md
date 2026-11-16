@@ -1,152 +1,169 @@
-\# Analytix AI
+# 🤖 Analytix AI
 
-\### Your Personal AI Data Analyst
+### AI-Powered Personal Data Analyst
 
+Analytix AI is an intelligent data analytics application built using Python, Streamlit, and AI models. It helps users analyze datasets, clean data, visualize patterns, generate insights, and interact with their data using natural language.
 
+The application supports **Groq AI for cloud-based intelligence** and **Ollama for local AI processing**.
 
-Analytix AI is an AI-powered data analytics application built with Python and Streamlit. It helps users analyze datasets, clean data, visualize trends, detect outliers, and generate intelligent insights through an interactive interface.
+---
 
+## 🚀 Features
 
+- 📊 **Automated Data Analysis** – Analyze datasets and generate statistical summaries.
+- 🧹 **Data Cleaning** – Identify and handle missing values and duplicate records.
+- 📈 **Data Visualization** – Generate charts and visualizations.
+- 🤖 **AI-Powered Insights** – Get intelligent explanations and recommendations.
+- 🧠 **Autonomous Analysis** – Automatically analyze datasets and generate reports.
+- 💬 **Ask Your Data** – Interact with datasets using natural language.
+- 🖥️ **Local AI Analyst** – Run AI analysis locally using Ollama.
+- ☁️ **Cloud AI Integration** – Use Groq API for cloud-based AI responses.
+- 📁 **Workspace Management** – Manage datasets and analysis workflows.
+- 📜 **Analysis History** – Access previous analysis activities.
+- 📑 **Report Generation** – Generate downloadable analytical reports.
 
-\## Features
+---
 
+## 🛠️ Tech Stack
 
+| Technology | Purpose |
+|---|---|
+| Python | Core programming language |
+| Streamlit | Interactive web application |
+| Pandas | Data manipulation and analysis |
+| NumPy | Numerical computing |
+| Matplotlib | Data visualization |
+| Seaborn | Statistical visualization |
+| Ollama | Local AI inference |
+| Groq API | Cloud AI inference |
+| Git & GitHub | Version control |
 
-\- 📊 Interactive Data Analysis
+---
 
-\- 🧹 Data Cleaning
+## 🧠 AI Integration
 
-\- 📈 Data Visualization
+Analytix AI supports two AI providers:
 
-\- 🔍 Outlier Detection
+### ☁️ Groq AI
+- Cloud-based AI processing.
+- Fast AI-generated insights and recommendations.
+- Configured using `GROQ_API_KEY`.
+- Suitable for Streamlit Cloud deployment.
 
-\- 🤖 AI-Powered Insights
+### 🖥️ Ollama
+- Local AI processing.
+- Runs AI models on your own machine.
+- Uses `llama3.2:3b` by default.
+- Does not require a cloud API key for local inference.
 
-\- 🧠 Autonomous Data Analysis
+---
 
-\- 💬 Ask Your Data
+## 📂 Supported Data Formats
 
-\- 📑 Automated Reports
+- CSV
+- Excel (`.xlsx`, `.xls`)
 
-\- 💾 Saved Workspace
+---
 
-\- 📜 Analysis History
+## ⚙️ Installation & Setup
 
-\- 📝 Activity Logs
-
-
-
-\## Tech Stack
-
-
-
-\- Python
-
-\- Streamlit
-
-\- Pandas
-
-\- NumPy
-
-\- Matplotlib
-
-\- Seaborn
-
-\- Plotly
-
-\- Requests
-
-\- ReportLab
-
-
-
-\## Installation
-
-
-
-Clone the repository:
-
-
-
-```bash
-
-git clone YOUR\_GITHUB\_REPOSITORY\_URL
-
-```
-
-
-
-Navigate to the project directory:
-
-
+### 1. Clone Repository
 
 ```bash
-
+git clone https://github.com/ravindra-data/Analytix-AI.git
 cd Analytix-AI
-
 ```
 
-
-
-Create a virtual environment:
-
-
+### 2. Create Virtual Environment
 
 ```bash
-
 python -m venv .venv
-
 ```
 
-
-
-Activate the virtual environment on Windows:
-
-
+Activate it on Windows:
 
 ```bash
-
-.venv\\Scripts\\activate
-
+.venv\Scripts\activate
 ```
 
-
-
-Install dependencies:
-
-
+### 3. Install Dependencies
 
 ```bash
-
 pip install -r requirements.txt
-
 ```
 
+### 4. Install Ollama
 
+Download Ollama:
 
-Run the application:
+https://ollama.com/download
 
-
+Pull the required model:
 
 ```bash
-
-streamlit run app.py
-
+ollama pull llama3.2:3b
 ```
 
+Start Ollama:
 
+```bash
+ollama serve
+```
 
-\## Developer
+### 5. Run Application
 
+```bash
+streamlit run app.py
+```
 
+---
 
-Developed by RK
+## 🔑 Groq API Configuration
 
+For cloud AI functionality, configure the following environment variable:
 
+```bash
+GROQ_API_KEY=your_groq_api_key
+```
 
-\## Project
+For Streamlit Cloud deployment, add the API key under:
 
+**App Settings → Secrets**
 
+```toml
+GROQ_API_KEY = "your_groq_api_key"
+```
 
-Analytix AI — Your Personal AI Data Analyst
+Never commit your actual API key to GitHub.
 
+---
+
+## 🌐 Live Application
+
+**GitHub Repository:**  
+https://github.com/ravindra-data/Analytix-AI
+
+**Live Demo:**  
+[Analytix AI – Streamlit Cloud](https://analytix-ai.streamlit.app/)
+
+---
+
+## 👨‍💻 Developer
+
+**Ravindra Kumar**
+
+GitHub: [@ravindra-data](https://github.com/ravindra-data)
+
+---
+
+## ⭐ Project Highlights
+
+- AI-powered data analytics.
+- Automated analytical workflows.
+- Cloud and local AI integration.
+- Interactive Streamlit interface.
+- Practical application of Python and AI technologies.
+
+---
+
+### Built with Python, Streamlit, Groq AI & Ollama ❤️

@@ -34,6 +34,72 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+
+# ============================================================
+# UI POLISH - SUBTLE HOVER EFFECTS
+# ============================================================
+
+st.markdown(
+    """
+    <style>
+    /* Buttons: gentle lift + color transition */
+    div.stButton > button,
+    div.stDownloadButton > button,
+    div[data-testid="stFormSubmitButton"] > button {
+        transition: transform 180ms ease, box-shadow 180ms ease,
+                    border-color 180ms ease, background-color 180ms ease;
+        border-radius: 10px;
+    }
+    div.stButton > button:hover,
+    div.stDownloadButton > button:hover,
+    div[data-testid="stFormSubmitButton"] > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.16);
+    }
+
+    /* Metric cards and bordered containers */
+    div[data-testid="stMetric"],
+    div[data-testid="stVerticalBlockBorderWrapper"] {
+        transition: transform 180ms ease, box-shadow 180ms ease,
+                    border-color 180ms ease;
+    }
+    div[data-testid="stMetric"]:hover,
+    div[data-testid="stVerticalBlockBorderWrapper"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 7px 18px rgba(37, 99, 235, 0.10);
+    }
+
+    /* Expander headers */
+    details summary {
+        transition: background-color 180ms ease;
+        border-radius: 8px;
+    }
+    details summary:hover {
+        background-color: rgba(99, 102, 241, 0.07);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        div.stButton > button,
+        div.stDownloadButton > button,
+        div[data-testid="stFormSubmitButton"] > button,
+        div[data-testid="stMetric"],
+        div[data-testid="stVerticalBlockBorderWrapper"],
+        details summary {
+            transition: none;
+        }
+        div.stButton > button:hover,
+        div.stDownloadButton > button:hover,
+        div[data-testid="stFormSubmitButton"] > button:hover,
+        div[data-testid="stMetric"]:hover,
+        div[data-testid="stVerticalBlockBorderWrapper"]:hover {
+            transform: none;
+        }
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 APP_DIR = Path(__file__).resolve().parent
 
 DATA_DIR = APP_DIR / ".analytix_data"
@@ -2930,7 +2996,7 @@ Dataset:
                         )
 
                 with st.spinner(
-                    "Generating recommendations using Ollama..."
+                    "Generating AI business recommendations..."
                 ):
 
                     try:
@@ -4035,7 +4101,11 @@ Do not invent exact numbers.
         ):
 
             st.caption(
-                "Cloud app: Groq AI • Local app: Ollama"
+                "☁️ Cloud: Groq AI (API)  •  💻 Local: Ollama (llama3.2:3b)"
+            )
+            st.caption(
+                "AI responses use Groq on Streamlit Cloud when GROQ_API_KEY is configured; "
+                "your local app falls back to Ollama."
             )
 
             ai_question = st.text_area(
@@ -4110,7 +4180,8 @@ footer_html = textwrap.dedent("""
     <div style="margin-top:2.5rem;padding:24px 18px 20px;text-align:center;border:1px solid rgba(128,128,128,.22);border-radius:16px;background:linear-gradient(135deg,rgba(99,102,241,.07),rgba(14,165,233,.04));">
         <div style="font-size:1.35rem;font-weight:700;letter-spacing:.2px;margin-bottom:6px;">🤖 Analytix AI</div>
         <div style="font-size:.95rem;opacity:.82;margin-bottom:14px;">Your Personal AI Data Analyst</div>
-        <div style="display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(128,128,128,.10);font-size:.78rem;">Python • Streamlit • Ollama</div>
+        <div style="display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(128,128,128,.10);font-size:.78rem;">Python • Streamlit • Groq AI • Ollama</div>
+        <div style="margin-top:8px;font-size:.78rem;opacity:.68;">Cloud AI: Groq API &nbsp;•&nbsp; Local AI: Ollama</div>
         <div style="margin-top:15px;font-size:.82rem;opacity:.72;">Developed by <strong style="opacity:1;">RK</strong></div>
         <div style="margin-top:5px;font-size:.75rem;opacity:.58;">© 2026 Analytix AI</div>
     </div>
