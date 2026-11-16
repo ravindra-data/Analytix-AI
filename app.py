@@ -1557,33 +1557,8 @@ Be professional, practical, and concise.
 Do not invent facts unsupported by the data.
 """
 
-    try:
-
-        response = requests.post(
-            OLLAMA_URL,
-            json={
-                "model": OLLAMA_MODEL,
-                "prompt": prompt,
-                "stream": False
-            },
-            timeout=180
-        )
-
-        response.raise_for_status()
-
-        result = response.json().get(
-            "response",
-            "AI recommendations unavailable."
-        )
-
-        return result
-
-    except Exception as e:
-
-        return (
-            "AI recommendations unavailable. "
-            f"Please check Ollama connection. Error: {str(e)}"
-        )
+    # Cloud uses Groq when GROQ_API_KEY is configured; local falls back to Ollama.
+    return get_ai_response(prompt)
 
 
 # ============================================================
